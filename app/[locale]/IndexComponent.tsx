@@ -1,23 +1,15 @@
 "use client"
 
 import { safeSignout } from "@/actions/auth"
-import PageLayout from "@/components/PageLayout"
+import { Link } from "@/i18n/routing"
 import { Session } from "next-auth"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
 
-type Props = {
-  session: Session | null
-}
-
-export default function Index({ session }: Props) {
+const IndexComponent = ({ session }: { session: Session | null }) => {
   const t = useTranslations("Index")
   const locale = useLocale()
-  console.log("session", session)
-
   return (
-    <PageLayout title={t("title")}>
-      {/* <IndexComponent session={session} /> */}
+    <div>
       {session ? (
         <>
           <p>{t("loggedIn", { username: session.user?.name })}</p>
@@ -34,6 +26,8 @@ export default function Index({ session }: Props) {
           <Link href={locale + "/login"}>{t("login")}</Link>
         </>
       )}
-    </PageLayout>
+    </div>
   )
 }
+
+export default IndexComponent

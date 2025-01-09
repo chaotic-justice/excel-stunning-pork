@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { routing, routingConfig } from "@/i18n/routing"
+import { routing } from "@/i18n/routing"
 import createIntlMiddleware from "next-intl/middleware"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -7,7 +7,6 @@ interface AppRouteHandlerFnContext {
   params?: Record<string, string | string[]>
 }
 
-// TODO: may need to replace rtouting with routingConfig
 const intlMiddleware = createIntlMiddleware({
   locales: routing.locales,
   defaultLocale: routing.defaultLocale,
@@ -31,7 +30,8 @@ const authMiddleware = (request: NextRequest, ctx: AppRouteHandlerFnContext) => 
     const isAuthPage = authPathnameRegex.test(path)
 
     if (isAuth && isHomePage) {
-      return NextResponse.redirect(new URL("/dashboard", req.url))
+      // return NextResponse.redirect(new URL("/", req.url))
+      console.log("aturation")
     } else if (!isAuth) {
       if (isAuthPage) {
         return NextResponse.redirect(new URL("/signin", req.url))

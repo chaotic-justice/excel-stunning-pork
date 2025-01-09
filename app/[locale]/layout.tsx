@@ -1,20 +1,21 @@
-import BaiDuAnalytics from "@/app/BaiDuAnalytics"
 import GoogleAnalytics from "@/app/GoogleAnalytics"
+import { auth } from "@/auth"
 import Footer from "@/components/footer/Footer"
 import Header from "@/components/header/Header"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { siteConfig } from "@/config/site"
+import { routing } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
 import "@/styles/globals.css"
 import "@/styles/loading.css"
 import { Analytics } from "@vercel/analytics/react"
 import { Viewport } from "next"
-import { Inter as FontSans } from "next/font/google"
+import { SessionProvider } from "next-auth/react"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
+import { Inter as FontSans } from "next/font/google"
 import { notFound } from "next/navigation"
-import { routing } from "@/i18n/routing"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -36,16 +37,12 @@ export const viewport: Viewport = {
   themeColor: siteConfig.themeColors,
 }
 
-export default async function RootLayout(props: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
-  const params = await props.params;
+export default async function LocaleLayout(props: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+  const params = await props.params
 
-  const {
-    locale
-  } = params;
+  const { locale } = params
 
-  const {
-    children
-  } = props;
+  const { children } = props
 
   if (!routing.locales.includes(locale as any)) {
     notFound()
@@ -54,6 +51,7 @@ export default async function RootLayout(props: { children: React.ReactNode; par
   // Providing all messages to the client
   // side is the easiest way to get started
   const messages = await getMessages()
+  const session = await auth()
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -61,9 +59,11 @@ export default async function RootLayout(props: { children: React.ReactNode; par
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme={siteConfig.defaultNextTheme} enableSystem>
           <NextIntlClientProvider messages={messages}>
-            <Header />
-            <main className="flex flex-col items-center py-6">{children}</main>
-            <Footer />
+            <SessionProvider session={session}>
+              <Header />
+              <main className="flex flex-col items-center py-6">{children}</main>
+              <Footer />
+            </SessionProvider>
           </NextIntlClientProvider>
           <Analytics />
           <TailwindIndicator />
@@ -73,7 +73,6 @@ export default async function RootLayout(props: { children: React.ReactNode; par
         ) : (
           <>
             <GoogleAnalytics />
-            <BaiDuAnalytics />
           </>
         )}
       </body>
