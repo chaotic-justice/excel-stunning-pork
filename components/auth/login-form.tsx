@@ -7,13 +7,13 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 
-import { LoginSchema } from "@/schemas"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { CardWrapper } from "@/components/auth/card-wrapper"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
+import { LoginSchema } from "@/types/schemas"
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()

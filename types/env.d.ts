@@ -6,6 +6,7 @@ declare global {
       AUTH_SECRET: string;
       NEXT_PUBLIC_ADMINS: string;
       NEXT_API_ENDPOINT: string;
+      CF_WORKER_BASE_URL: string;
       NEXT_GRAPHQL_ENDPOINT: string;
       AUTH_GOOGLE_ID: string;
       AUTH_GOOGLE_SECRET: string;

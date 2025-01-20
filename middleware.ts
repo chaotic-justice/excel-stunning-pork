@@ -50,5 +50,5 @@ export const middleware = (request: NextRequest, ctx: AppRouteHandlerFnContext):
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|_vercel|styles|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 }
