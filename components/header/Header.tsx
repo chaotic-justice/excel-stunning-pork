@@ -1,9 +1,12 @@
-import HeaderLinks from "@/components/header/HeaderLinks";
-import { siteConfig } from "@/config/site";
-import Image from "next/image";
+import { auth } from "@/auth"
+import HeaderLinks from "@/components/header/HeaderLinks"
+import { siteConfig } from "@/config/site"
+import Image from "next/image"
 import Link from "next/link"
 
-const Header = () => {
+const Header = async () => {
+  const session = await auth()
+
   return (
     <header className="py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -17,7 +20,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <HeaderLinks />
+            <HeaderLinks session={session} />
           </div>
         </nav>
       </div>
@@ -25,4 +28,4 @@ const Header = () => {
   )
 }
 
-export default Header;
+export default Header

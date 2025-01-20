@@ -12,7 +12,7 @@ export const Social = () => {
 
   const onClick = (provider: "google" | "github") => {
     signIn(provider, {
-      callbackUrl: callbackUrl || "/secret",
+      callbackUrl: callbackUrl || "/swans",
     })
   }
 

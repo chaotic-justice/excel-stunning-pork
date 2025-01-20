@@ -32,7 +32,7 @@ export default function Index({ session }: Props) {
       ) : (
         <>
           <p>{t("loggedOut")}</p>
-          <Link href={locale + "/login"}>{t("login")}</Link>
+          <Link href={locale + "/signin"}>{t("login")}</Link>
         </>
       )}
     </PageLayout>
