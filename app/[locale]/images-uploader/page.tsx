@@ -1,4 +1,4 @@
-import { ImageUploader } from "@/app/[locale]/images-uploader/ImagesUploader"
+import { ImageUploader } from "@/app/[locale]/images-uploader/component"
 
 const page = async () => {
   return (

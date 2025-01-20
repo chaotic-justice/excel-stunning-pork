@@ -11,7 +11,7 @@ Demo address：https://starter.weijunext.com
 
 [![Next.js 15 Starter](./public/og.png)](https://www.starter.weijunext.com/)
 
-## Tech Stack 
+## Tech Stack
 
 Next.js 15 Starter is built on the following stack:
 
@@ -36,7 +36,7 @@ npm run dev
 
 Edit these files:
 - `.env` or `.env.local`
-- `config/site.ts`, fill in your website information 
+- `config/site.ts`, fill in your website information
 - `public`, change logo file
 - `public/robots.txt`
 - `app/sitemap.ts`
@@ -48,25 +48,3 @@ s
 Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/weijunext/clean-nextjs-starter&project-name=&repository-name=clean-nextjs-starter&demo-title=CleanNextjsStarter&demo-description=Clean%20nextjs%20starter.&demo-url=https://starter.weijunext.com&demo-image=https://starter.weijunext.com/og.png)
-
-## About Me
-
-**Full-Stack Engineer, Open-Source Next.js Artist & AI Enthusiast.**
-
-**全栈工程师，Next.js 开源手艺人，AI降临派。**
-
-[My Blog](https://weijunext.com)  
-[Github](https://github.com/weijunext)  
-[Twitter/X - Zh](https://twitter.com/weijunext)  
-[Twitter/X - En](https://twitter.com/judewei_dev)  
-[Medium](https://medium.com/@weijunext)  
-[掘金](https://juejin.cn/user/26044008768029)  
-[知乎](https://www.zhihu.com/people/mo-mo-mo-89-12-11)  
-[微信交流群](https://weijunext.com/make-a-friend)  
-
-If this project is helpful to you, star the repo and buy me a coffee, thank you.
-
-<a href="https://www.buymeacoffee.com/weijunext" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;" ></a>
-
-
-<img src="./public/zs.jpeg" alt="赞赏作者" style="height: 200px; width: 200px">

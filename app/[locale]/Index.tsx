@@ -23,7 +23,7 @@ export default function Index({ session }: Props) {
             <Link href={locale + "/secret"}>{t("secret")}</Link>
           </p>
           <p>
-            <Link href={locale + "/docu"}>docu center</Link>
+            <Link href={locale + "/images-uploader"}>docu center</Link>
           </p>
           <button onClick={safeSignout} type="button">
             {t("logout")}

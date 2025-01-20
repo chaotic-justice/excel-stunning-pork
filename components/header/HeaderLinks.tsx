@@ -21,18 +21,12 @@ const HeaderLinks = () => {
   return (
     <div className="flex flex-row items-center">
       {headerLinks.map((link) => (
-        <Link
-          key={link.name}
-          href={link.href}
-          target="_blank"
-          rel="noopener norefferer nofollow"
-          className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
-        >
-          {link.icon &&
-            React.createElement(link.icon, { className: "text-lg" })}
+        <Link key={link.name} href={link.href} target="_blank" rel="noopener norefferer nofollow" className="mx-3 flex max-w-[24px] flex-col items-center justify-center">
+          {link.icon && React.createElement(link.icon, { className: "text-lg" })}
         </Link>
       ))}
+      <Link href={"/images-uploader"}>docu center</Link>
     </div>
-  );
+  )
 };
 export default HeaderLinks;
