@@ -1,6 +1,6 @@
 "use client"
 
-import { safeSignout } from "@/actions/auth"
+import { generateCfToken, safeSignout } from "@/actions/auth"
 import AuthListener from "@/app/[locale]/AuthListener"
 import PageLayout from "@/components/PageLayout"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,6 @@ import { Session } from "next-auth"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { MeDocument, MeQuery } from "../../../gql/generated/graphql"
-import { generateCfToken } from "@/lib/utils"
 
 export default function Secret({ session }: { session: Session | null }) {
   const t = useTranslations("Secret")
