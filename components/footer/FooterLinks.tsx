@@ -1,29 +1,12 @@
 import Link from "next/link";
 import React from "react";
-import { BsGithub, BsTwitterX, BsWechat } from "react-icons/bs";
-import { MdEmail } from "react-icons/md";
-import { SiBuymeacoffee, SiJuejin } from "react-icons/si";
+import { BsGithub } from "react-icons/bs"
+import { MdEmail } from "react-icons/md"
 
 const footerLinks = [
-  { name: "email", href: "mailto:weijunext@gmail.com", icon: MdEmail },
-  { name: "twitter", href: "https://twitter.com/weijunext", icon: BsTwitterX },
-  { name: "github", href: "https://github.com/weijunext/", icon: BsGithub },
-  {
-    name: "buyMeCoffee",
-    href: "https://www.buymeacoffee.com/weijunext",
-    icon: SiBuymeacoffee,
-  },
-  {
-    name: "juejin",
-    href: "https://juejin.cn/user/26044008768029",
-    icon: SiJuejin,
-  },
-  {
-    name: "weChat",
-    href: "https://weijunext.com/make-a-friend",
-    icon: BsWechat,
-  },
-];
+  { name: "email", href: "mailto:deepocean.2900@gmail.com", icon: MdEmail },
+  { name: "github", href: "https://github.com/chaotic-justice/", icon: BsGithub },
+]
 
 const FooterLinks = () => {
   return (

@@ -3,7 +3,6 @@ import { auth } from "@/auth"
 import Footer from "@/components/footer/Footer"
 import Header from "@/components/header/Header"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
-import { ThemeProvider } from "@/components/ThemeProvider"
 import { siteConfig } from "@/config/site"
 import { routing } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
@@ -16,6 +15,7 @@ import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 import { Inter as FontSans } from "next/font/google"
 import { notFound } from "next/navigation"
+import { Toaster } from "sonner"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -26,12 +26,9 @@ export const metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: siteConfig.authors,
-  creator: siteConfig.creator,
   icons: siteConfig.icons,
   metadataBase: siteConfig.metadataBase,
   openGraph: siteConfig.openGraph,
-  twitter: siteConfig.twitter,
 }
 export const viewport: Viewport = {
   themeColor: siteConfig.themeColors,
@@ -56,18 +53,19 @@ export default async function LocaleLayout(props: { children: React.ReactNode; p
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-        <ThemeProvider attribute="class" defaultTheme={siteConfig.defaultNextTheme} enableSystem>
-          <NextIntlClientProvider messages={messages}>
-            <SessionProvider session={session}>
-              <Header />
-              <main className="flex flex-col items-center py-6">{children}</main>
-              <Footer />
-            </SessionProvider>
-          </NextIntlClientProvider>
-          <Analytics />
-          <TailwindIndicator />
-        </ThemeProvider>
+      <body className={cn("flex flex-col min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+        <NextIntlClientProvider messages={messages}>
+          <SessionProvider session={session}>
+            <Header />
+            <main className="flex flex-col items-center py-6">
+              {children}
+              <Toaster richColors closeButton />
+            </main>
+            <Footer />
+          </SessionProvider>
+        </NextIntlClientProvider>
+        <Analytics />
+        <TailwindIndicator />
         {process.env.NODE_ENV === "development" ? (
           <></>
         ) : (

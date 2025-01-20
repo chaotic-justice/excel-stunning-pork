@@ -13,16 +13,17 @@ type Props = {
 export default function Index({ session }: Props) {
   const t = useTranslations("Index")
   const locale = useLocale()
-  console.log("session", session)
 
   return (
     <PageLayout title={t("title")}>
-      {/* <IndexComponent session={session} /> */}
       {session ? (
         <>
           <p>{t("loggedIn", { username: session.user?.name })}</p>
           <p>
             <Link href={locale + "/secret"}>{t("secret")}</Link>
+          </p>
+          <p>
+            <Link href={locale + "/docu"}>docu center</Link>
           </p>
           <button onClick={safeSignout} type="button">
             {t("logout")}

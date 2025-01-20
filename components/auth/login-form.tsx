@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
-// import { login } from "@/actions/login";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()
@@ -59,7 +58,7 @@ export const LoginForm = () => {
   }
 
   return (
-    <CardWrapper headerLabel="Welcome back" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
+    <CardWrapper headerLabel="password service temporarily down" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
@@ -87,7 +86,8 @@ export const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input {...field} disabled={isPending} placeholder="john.doe@example.com" type="email" />
+                        {/* replace true w/ isPending */}
+                        <Input {...field} disabled={true} placeholder="john.locke@island.com" type="email" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -100,11 +100,11 @@ export const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input {...field} disabled={isPending} placeholder="********" type="password" />
+                        <Input {...field} disabled={true} placeholder="********" type="password" />
                       </FormControl>
-                      <Button size="sm" variant="link" asChild className="px-0 font-normal flex justify-end">
+                      {/* <Button size="sm" variant="link" asChild className="px-0 font-normal flex justify-end">
                         <Link href="/auth/reset">Forgot password?</Link>
-                      </Button>
+                      </Button> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -114,7 +114,7 @@ export const LoginForm = () => {
           </div>
           <FormError message={error || errorUrl} />
           <FormSuccess message={success} />
-          <Button type="submit" disabled={isPending} className="w-full">
+          <Button type="submit" disabled={true} className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
         </form>
