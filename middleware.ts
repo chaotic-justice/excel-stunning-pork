@@ -14,7 +14,7 @@ const intlMiddleware = createIntlMiddleware({
 })
 
 const homePages = ["/", "/signin"]
-const authPages = ["/secret", "/sessions", "/images-uploader"]
+const authPages = ["/secret", "/swans", "/images-uploader"]
 
 const getPathnameRegex = (pages: string[]) => RegExp(`^(/(${routing.locales.join("|")}))?(${pages.flatMap((p) => (p === "/" ? ["", "/"] : p)).join("|")})/?$`, "i")
 
@@ -30,7 +30,7 @@ const authMiddleware = (request: NextRequest, ctx: AppRouteHandlerFnContext) => 
     const isAuthPage = authPathnameRegex.test(path)
 
     if (isAuth && isHomePage) {
-      return NextResponse.redirect(new URL("/sessions", req.url))
+      return NextResponse.redirect(new URL("/swans", req.url))
     } else if (!isAuth) {
       if (isAuthPage) {
         return NextResponse.redirect(new URL("/signin", req.url))
