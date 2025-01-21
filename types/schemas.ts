@@ -36,7 +36,7 @@ export const newDocumentSchema = z.object({
   id: z.union([z.number(), z.undefined()]).optional(),
 })
 
-export const newGroupSchema = z.object({
+export const newWorkerSchema = z.object({
   name: z.string(),
   authorId: z.number(),
   kind: z
@@ -52,4 +52,5 @@ export const newGroupSchema = z.object({
   updatedAt: z.union([z.string(), z.undefined()]).optional(),
 })
 
-// export const kindSchema = newGroupSchema.pick({ kind: true })
+export type Worker = z.infer<typeof newWorkerSchema>
+// export const kindSchema = newWorkerSchema.pick({ kind: true })

@@ -51,7 +51,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           session.error = "Refresh token expired."
         }
       }
-      console.log("***session block***")
       return session
     },
     async jwt({ token, account }) {
@@ -77,9 +76,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.accessToken = backendOauth.oAuthLogin.accessToken
           token.refreshToken = backendOauth.oAuthLogin.refreshToken
           token.userId = backendOauth.oAuthLogin.user.id
-        } catch (error) {
-          console.log("error inside jwt block", error.message)
-          token.error = `Oauth login error: ${error.message}`
+        } catch (err: Error | any) {
+          console.log("error inside jwt block", err.message)
+          token.error = `Oauth login error: ${err.message}`
         }
       }
 

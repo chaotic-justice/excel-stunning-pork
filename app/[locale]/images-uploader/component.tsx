@@ -167,9 +167,9 @@ export const ImageUploader: React.FC = () => {
             <li key={i} className="flex items-center justify-between px-4 py-3 border-b last:border-b-0">
               {previews && previews[i] && <Image src={previews[i] as string} alt={img.name} width={60} height={70} className="object-cover" />}
               <span className="text-gray-700">{img.name}</span>
-              <button onClick={() => deleteMe(i)} className="text-red-500 hover:text-red-700 focus:outline-none" aria-label={`Delete ${img.text}`}>
+              <Button onClick={() => deleteMe(i)} className="text-red-500 hover:text-red-700 focus:outline-none" aria-label={`Delete ${img.text}`}>
                 <X size={20} />
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

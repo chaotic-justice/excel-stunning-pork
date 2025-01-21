@@ -3,6 +3,7 @@ import { auth } from "@/auth"
 import Footer from "@/components/footer/Footer"
 import Header from "@/components/header/Header"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
+import { Toaster } from "@/components/ui/toaster"
 import { siteConfig } from "@/config/site"
 import { routing } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
@@ -15,7 +16,6 @@ import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 import { Inter as FontSans } from "next/font/google"
 import { notFound } from "next/navigation"
-import { Toaster } from "sonner"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -59,7 +59,7 @@ export default async function LocaleLayout(props: { children: React.ReactNode; p
             <Header />
             <main className="flex flex-col items-center py-6">
               {children}
-              <Toaster richColors closeButton />
+              <Toaster />
             </main>
             <Footer />
           </SessionProvider>
