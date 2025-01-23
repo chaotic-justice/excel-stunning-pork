@@ -22,17 +22,9 @@ export const RegisterSchema = z.object({
   }),
 })
 
-export const newUserSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  id: z.union([z.number(), z.undefined()]).optional(),
-  createdAt: z.union([z.string(), z.undefined()]).optional(),
-  updatedAt: z.union([z.string(), z.undefined()]).optional(),
-})
-
 export const newDocumentSchema = z.object({
   name: z.string(),
-  groupId: z.number(),
+  workerId: z.number(),
   id: z.union([z.number(), z.undefined()]).optional(),
 })
 
@@ -48,3 +40,4 @@ export const newWorkerSchema = z.object({
 })
 
 export type Worker = z.infer<typeof newWorkerSchema>
+export type Document = z.infer<typeof newDocumentSchema>

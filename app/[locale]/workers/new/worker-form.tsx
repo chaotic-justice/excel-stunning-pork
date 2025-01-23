@@ -28,11 +28,12 @@ const WorkerForm = () => {
   function onSubmit(values: Worker) {
     startTransition(() => {
       createNewWorker(values)
-        .then((data) => {
-          if (data.success) {
+        .then((res) => {
+          if (res.data) {
+            router.push(`/workers/${res.data.id}`)
             toast({ description: "created" })
           } else {
-            toast({ description: "failed", variant: "destructive" })
+            toast({ description: res.error, variant: "destructive" })
           }
         })
         .catch((error) => {

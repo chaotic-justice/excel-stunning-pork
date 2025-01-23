@@ -15,10 +15,28 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
+import { Document, newDocumentSchema, Worker } from "@/types/schemas"
+import { File as TFile, Folder, Tree, TreeViewElement } from "@/components/ui/file-tree"
+import { generateCfToken } from "@/actions/auth"
+import { Method, useFetcher } from "@/hooks/use-fetcher"
 
-const WorkerInDetails: React.FC = () => {
+type Props = { worker: Worker | null; documents: Document[] | null }
+
+const WorkerInDetails = ({ worker, documents }: Props) => {
   const [previews, setPreviews] = React.useState<Array<string | ArrayBuffer | null>>([])
   const { toast } = useToast()
+  const rootNode: TreeViewElement = {
+    id: String(worker?.id) || "0",
+    name: worker?.kind || "Unknown kind",
+    isSelectable: true,
+    children: documents?.map((doc, idx) => {
+      return {
+        id: String(doc?.id) || "0",
+        name: doc?.name || "untitled document",
+        isSelectable: true,
+      }
+    }),
+  }
 
   const formSchema = z.object({
     docs: z
@@ -62,24 +80,30 @@ const WorkerInDetails: React.FC = () => {
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
     maxFiles: 10,
-    maxSize: 1000000,
-    accept: { "image/png": [], "image/jpg": [], "image/jpeg": [] },
+    maxSize: 1000000 * 5,
+    accept: {
+      "application/pdf": [],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [],
+    },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const cfToken = await generateCfToken()
     const promises = values.docs.map(async (doc, _) => {
       const formData = new FormData()
       formData.append("file", doc)
-      return fetch("https://first-build.simpler-times.workers.dev/api/v1/upload", {
+      /*
+      fetch(`https://excel-peachy-serverless.simpler-times.workers.dev/api/r2/upload?kind=${worker?.kind}&workerId=${worker?.id}`, {
         headers: {
-          Authorization: `Bearer my-secret-token`,
+          Authorization: `Bearer ${cfToken}`,
         },
         method: "POST",
         body: formData,
       })
-        .then(async (uploaded) => {
-          const res = await uploaded.json()
-          console.log("uploaded?", res)
+      */
+      return useFetcher<Document, "POST">({ endpoint: `api/r2/upload?kind=${worker?.kind}&workerId=${worker?.id}`, method: "POST", schema: newDocumentSchema, variables: formData })
+        .then(async (res) => {
+          console.log("uploaded?", res.data)
           return true
         })
         .catch(() => {
@@ -92,7 +116,7 @@ const WorkerInDetails: React.FC = () => {
           form.resetField("docs")
           setPreviews([])
           form.clearErrors("docs")
-          return "uploaded successfully 🎉"
+          toast({ description: "uploaded successfully 🎉" })
         })
         .catch((err: Error | any) => {
           form.resetField("docs")
@@ -119,7 +143,19 @@ const WorkerInDetails: React.FC = () => {
   }
 
   return (
-    <div className="">
+    <>
+      <div>{worker?.name}</div>
+      <Tree className="overflow-hidden rounded-md bg-background p-2" initialSelectedId={String(worker?.id) || "0"} initialExpandedItems={[String(worker?.id) || "0"]} elements={[rootNode]}>
+        <Folder element={rootNode.name} value={rootNode.id}>
+          {rootNode.children?.map((ele, idx) => {
+            return (
+              <TFile key={idx} value={ele.id}>
+                <p>{ele.name}</p>
+              </TFile>
+            )
+          })}
+        </Folder>
+      </Tree>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -167,7 +203,7 @@ const WorkerInDetails: React.FC = () => {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   )
 }
 

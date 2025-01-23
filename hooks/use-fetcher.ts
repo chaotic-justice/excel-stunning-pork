@@ -1,18 +1,32 @@
 import { generateCfToken } from "@/actions/auth"
 import { ZodSchema } from "zod"
 
-type Method = "GET" | "POST" | "PUT" | "DELETE"
+export type Method = "GET" | "POST" | "PUT" | "DELETE"
 
-type FetcherParams<T> = {
+type CoreFetcherParams<T, M extends Method> = {
   endpoint: string
-  schema: ZodSchema<T>
-  method: Method
-  variables?: Partial<T>
+  method: M
+  variables: M extends "POST" ? Partial<T> | FormData : undefined
 }
 
-type DeleteFetcherParams<T> = Omit<FetcherParams<T>, "schema">
+type FetcherParams<T, M extends Method> = CoreFetcherParams<T, M> & {
+  schema: ZodSchema<T>
+}
 
-export const useFetcher = async <T>({ endpoint, method, schema, variables }: FetcherParams<T>): Promise<{ data: T | null; error: string | null }> => {
+// type DeleteFetcherParams<T> = Omit<FetcherParams<T>, "schema">
+
+interface FetcherResponse<T> {
+  data: T | null
+  error: string | null
+}
+
+interface DeletionResponse<T> extends Omit<FetcherResponse<T>, "data"> {
+  data: boolean | null
+}
+
+export const useFetcher = async <T, M extends Method>({ endpoint, method, schema, variables }: FetcherParams<T, M>): Promise<FetcherResponse<T>> => {
+  let data: T | null = null
+  let error: string | null = null
   try {
     const accessToken = await generateCfToken()
     console.log("Bearer", accessToken)
@@ -22,7 +36,8 @@ export const useFetcher = async <T>({ endpoint, method, schema, variables }: Fet
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      body: method === "POST" && variables ? JSON.stringify(variables) : undefined,
+      // @ts-ignore
+      body: method === "POST" && variables ? (endpoint.indexOf("upload") > -1 ? variables : JSON.stringify(variables)) : undefined,
     })
 
     if (!response.ok) {
@@ -33,15 +48,18 @@ export const useFetcher = async <T>({ endpoint, method, schema, variables }: Fet
     const result = await response.json()
     const res = schema.safeParse(result.data)
     if (!res.success) {
-      return { data: null, error: res.error.message }
+      error = res.error.message
     }
-    return { data: res.data, error: null }
-  } catch (err: Error | any) {
-    return { data: null, error: err.message }
+    data = res.data || null
+  } catch (err) {
+    error = err instanceof Error ? err.message : "An unexpected error occurred" + err
   }
+  return { data, error }
 }
 
-export const useFetcherToDelete = async <T>({ endpoint, method }: DeleteFetcherParams<T>): Promise<boolean> => {
+export const useFetcherToDelete = async <T, M extends Method>({ endpoint, method }: CoreFetcherParams<T, M>): Promise<DeletionResponse<T>> => {
+  let data: boolean | null = null
+  let error: string | null = null
   try {
     const accessToken = await generateCfToken()
     const response = await fetch(`${process.env.CF_WORKER_BASE_URL}/${endpoint}`, {
@@ -53,11 +71,12 @@ export const useFetcherToDelete = async <T>({ endpoint, method }: DeleteFetcherP
     })
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`)
+      // throw new Error(`Error: ${response.statusText}`)
+      error = response.statusText
     }
-    return response.status === 200
-  } catch (err: Error | any) {
-    console.log("err", err.message)
-    return false
+    data = response.status === 200
+  } catch (err) {
+    error = err instanceof Error ? err.message : "An unexpected error occurred"
   }
+  return { data, error }
 }
