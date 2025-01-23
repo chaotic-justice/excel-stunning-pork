@@ -38,13 +38,8 @@ export const newDocumentSchema = z.object({
 
 export const newWorkerSchema = z.object({
   name: z.string(),
-  authorId: z.number(),
   kind: z
     .union([z.literal("unknown"), z.literal("costco"), z.literal("sales-agents"), z.literal("banking"), z.undefined()])
-    .optional()
-    .nullable(),
-  status: z
-    .union([z.literal("not_started"), z.literal("started"), z.literal("failed"), z.literal("complete"), z.undefined()])
     .optional()
     .nullable(),
   id: z.union([z.number(), z.undefined()]).optional(),
@@ -53,4 +48,3 @@ export const newWorkerSchema = z.object({
 })
 
 export type Worker = z.infer<typeof newWorkerSchema>
-// export const kindSchema = newWorkerSchema.pick({ kind: true })

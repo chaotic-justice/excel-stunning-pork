@@ -7,7 +7,6 @@ import { createNewWorker } from "@/actions/workers"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "@/i18n/routing"
 import { Worker, newWorkerSchema } from "@/types/schemas"
@@ -21,7 +20,6 @@ const WorkerForm = () => {
   const form = useForm<Worker>({
     resolver: zodResolver(newWorkerSchema),
     defaultValues: {
-      authorId: 1,
       kind: "banking",
       name: "dummy",
     },
@@ -33,7 +31,6 @@ const WorkerForm = () => {
         .then((data) => {
           if (data.success) {
             toast({ description: "created" })
-            router.push("/workers")
           } else {
             toast({ description: "failed", variant: "destructive" })
           }
@@ -57,38 +54,6 @@ const WorkerForm = () => {
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>This is your public display name.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Notify me about...</FormLabel>
-              <FormControl>
-                <RadioGroup onValueChange={field.onChange} className="flex flex-col space-y-1">
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="not_started" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Not Started</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="started" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Started</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="failed" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Failed</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}

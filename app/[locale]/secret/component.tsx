@@ -1,7 +1,6 @@
 "use client"
 
 import { generateCfToken, safeSignout } from "@/actions/auth"
-import AuthListener from "@/app/[locale]/AuthListener"
 import PageLayout from "@/components/PageLayout"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
@@ -35,7 +34,6 @@ export default function Secret({ session }: { session: Session | null }) {
 
   return (
     <PageLayout title={t("title")}>
-      <AuthListener session={session} />
       <pre style={{ whiteSpace: "pre-wrap" }}>{sessionObj}</pre>
       {meResponse && <div>{meResponse.email}</div>}
       <div>{token}</div>

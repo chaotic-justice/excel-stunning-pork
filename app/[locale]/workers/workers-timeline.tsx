@@ -12,10 +12,12 @@ import { toast } from "@/hooks/use-toast"
 import { Link } from "@/i18n/routing"
 import { Worker, newWorkerSchema } from "@/types/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { X } from "lucide-react"
+import { BellRing, X } from "lucide-react"
 import { startTransition, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
-import { RiAddLargeFill } from "react-icons/ri"
+import { Ri24HoursLine, RiAddLargeFill } from "react-icons/ri"
+import { useLocale } from "next-intl"
+import { Badge } from "@/components/ui/badge"
 
 type Props = {
   workers: Worker[] | null
@@ -23,32 +25,7 @@ type Props = {
 
 const FeedTimeline = ({ workers }: Props) => {
   const [loading, setLoading] = useState(false)
-
-  const form = useForm<Worker>({
-    resolver: zodResolver(newWorkerSchema),
-    defaultValues: {
-      authorId: 1,
-      kind: "banking",
-      name: "dummy",
-    },
-  })
-
-  function onSubmit(values: Worker) {
-    console.log("submitting..", values)
-    startTransition(() => {
-      createNewWorker(values)
-        .then((data) => {
-          if (data.success) {
-            toast({ description: "created" })
-          } else {
-            toast({ description: "failed" })
-          }
-        })
-        .catch((error) => {
-          toast({ title: "While creating a worker", description: `${error.message}` })
-        })
-    })
-  }
+  const locale = useLocale()
 
   const groupedFeedItems = useMemo(() => {
     const grouped = (workers || []).reduce((acc, item) => {
@@ -80,45 +57,10 @@ const FeedTimeline = ({ workers }: Props) => {
   return (
     <div className="w-full max-w-3xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Worker Station</h1>
-      <Button variant="outline">
+      <Button variant="outline" className="mb-12 md:mb-8">
         <RiAddLargeFill className="h-5 w-5" />
         <Link href="/workers/new">new entry</Link>
       </Button>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">
-            <RiAddLargeFill className="h-5 w-5" />
-            new entry
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormDescription>This is your public display name.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
       <Accordion type="multiple" defaultValue={[currentMonthYear]} className="w-full">
         {groupedFeedItems.map(([monthYear, items]) => (
           <AccordionItem key={monthYear} value={monthYear}>
@@ -132,19 +74,25 @@ const FeedTimeline = ({ workers }: Props) => {
                       <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-primary text-primary-foreground text-sm font-medium">{item.id}</div>
                       <Card>
                         <CardHeader className="pb-2">
-                          <CardTitle>{item.name}</CardTitle>
-                          <CardDescription>{new Date(item.createdAt!).toLocaleString()}</CardDescription>
+                          <div className="flex">
+                            <div className="flex-1 space-y-1">
+                              <CardTitle>
+                                <Link href={locale + `/workers/${item.id}`}>{item.name}</Link>
+                              </CardTitle>
+                              <CardDescription>{new Date(item.createdAt!).toLocaleString()}</CardDescription>
+                            </div>
+                            <Button
+                              variant="destructive"
+                              onClick={() => {
+                                deleteWorker({ id: item.id })
+                              }}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </div>
                         </CardHeader>
                         <CardContent>
-                          <p>{item.kind}</p>
-                          <Button
-                            variant="destructive"
-                            onClick={() => {
-                              deleteWorker({ id: item.id })
-                            }}
-                          >
-                            <X size={20} />
-                          </Button>
+                          <Badge>{item.kind}</Badge>
                         </CardContent>
                       </Card>
                     </div>
