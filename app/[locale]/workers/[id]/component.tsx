@@ -70,7 +70,7 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
       const firstError = fileRejections[0].errors[0]
       toast({ variant: "destructive", title: firstError.code, description: firstError.message })
     },
-    maxFiles: 10,
+    maxFiles: 20,
     maxSize: 1000000 * 5,
     accept: acceptables["acceptables"],
     disabled: !acceptables["isValid"],
@@ -83,7 +83,6 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
 
       return uploadDocument({ worker, variables: formData })
         .then((res) => {
-          console.log("uploaded?", res)
           return true
         })
         .catch(() => {
@@ -92,10 +91,13 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
     })
     try {
       Promise.all(promises)
-        .then(() => {
+        .then(async (vals) => {
+          const revalidated = await fetch(`/api/revalidate?tag=getDocs/${worker.id}`)
+          const revalidation = await revalidated.json()
+          console.log("revalidation", revalidation)
           form.resetField("docs")
           form.clearErrors("docs")
-          toast({ description: "uploaded successfully 🎉" })
+          toast({ description: "uploaded successfully 🎉" + vals.every((v) => !!v) })
         })
         .catch((err: Error | any) => {
           form.resetField("docs")
@@ -120,7 +122,6 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
 
   return (
     <>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

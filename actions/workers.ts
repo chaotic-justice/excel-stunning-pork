@@ -28,6 +28,5 @@ export const deleteWorker = async (values: Partial<Worker>) => {
 
 export const uploadDocument = async ({ worker, variables }: { worker: Worker; variables: FormData }) => {
   const res = await useFetcher<Document, "POST">({ endpoint: `api/r2/upload?kind=${worker?.kind}&workerId=${worker?.id}`, method: "POST", schema: newDocumentSchema, variables })
-  revalidateTag(`getDocs/${worker.id}`)
   return res
 }
