@@ -120,24 +120,7 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
 
   return (
     <>
-      <p className="font-bold text-2xl text-center mb-8">Worker Details</p>
-      <div className="flex flex-col md:flex-row justify-evenly space-y-4 mb-12 md:mb-8">
-        <div className="md:self-center shadow-sm shadow-card-foreground p-3">
-          <h2>{worker?.name}</h2>
-          <h4 className="text-muted-foreground">kind: {worker?.kind}</h4>
-          <h5 className="text-muted-foreground">created at: {worker?.createdAt}</h5>
-        </div>
-        <div className="text-left">
-          {documents?.map((doc, index) => (
-            <div key={index} className="grid grid-cols-[25px_1fr] items-start pb-2 last:mb-0 last:pb-0">
-              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">{doc.name}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
