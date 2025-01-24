@@ -11,9 +11,8 @@ type CoreFetcherParams<T, M extends Method> = {
 
 type FetcherParams<T, M extends Method> = CoreFetcherParams<T, M> & {
   schema: ZodSchema<T>
+  tags?: string[]
 }
-
-// type DeleteFetcherParams<T> = Omit<FetcherParams<T>, "schema">
 
 interface FetcherResponse<T> {
   data: T | null
@@ -24,24 +23,32 @@ interface DeletionResponse<T> extends Omit<FetcherResponse<T>, "data"> {
   data: boolean | null
 }
 
-export const useFetcher = async <T, M extends Method>({ endpoint, method, schema, variables }: FetcherParams<T, M>): Promise<FetcherResponse<T>> => {
+export const useFetcher = async <T, M extends Method>({ endpoint, method, schema, variables, tags }: FetcherParams<T, M>): Promise<FetcherResponse<T>> => {
   let data: T | null = null
   let error: string | null = null
+
+  const accessToken = await generateCfToken()
+  const isUploading = endpoint.indexOf("upload") > -1
+  const headers: RequestInit["headers"] = {
+    Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json",
+  }
+  if (isUploading) {
+    delete headers["Content-Type"]
+  }
+
   try {
-    const accessToken = await generateCfToken()
     console.log("Bearer", accessToken)
-    const response = await fetch(`${process.env.CF_WORKER_BASE_URL}/${endpoint}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CF_WORKER_BASE}/${endpoint}`, {
       method,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+      headers,
       // @ts-ignore
-      body: method === "POST" && variables ? (endpoint.indexOf("upload") > -1 ? variables : JSON.stringify(variables)) : undefined,
+      body: method === "POST" && variables ? (isUploading ? variables : JSON.stringify(variables)) : undefined,
     })
 
     if (!response.ok) {
-      throw new Error(response.statusText)
+      console.log("result", response)
+      return { data: null, error: response.statusText }
     }
 
     // Validate the response using Zod
@@ -62,7 +69,7 @@ export const useFetcherToDelete = async <T, M extends Method>({ endpoint, method
   let error: string | null = null
   try {
     const accessToken = await generateCfToken()
-    const response = await fetch(`${process.env.CF_WORKER_BASE_URL}/${endpoint}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CF_WORKER_BASE}/${endpoint}`, {
       method,
       headers: {
         Authorization: `Bearer ${accessToken}`,

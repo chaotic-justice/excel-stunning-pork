@@ -1,6 +1,5 @@
 import { getDocumentsByWorkerId, getWorkerById } from "@/actions/workers"
 import WorkerInDetails from "@/app/[locale]/workers/[id]/component"
-import { FileTreeDemo } from "@/app/[locale]/workers/[id]/dummy-card"
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id
