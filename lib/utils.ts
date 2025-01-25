@@ -26,7 +26,9 @@ export function getInitials(fullName: string | null | undefined): string {
 /*
 auth related functions
 */
-export function isAdmin(s: string): boolean {
+export function isAdmin(s: string | null | undefined): boolean {
+  if (!s) return false
+
   const admins = process.env.NEXT_PUBLIC_ADMINS.split(", ").map((email) => email.trim())
   return admins.indexOf(s) > -1
 }

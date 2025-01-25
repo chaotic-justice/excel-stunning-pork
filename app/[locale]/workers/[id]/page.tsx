@@ -30,7 +30,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         </div>
       </div>
-      <WorkerInDetails worker={workerResponse.data} documents={docsResponse.data} />
+      {worker && <WorkerInDetails worker={worker} documents={docsResponse.data} />}
     </div>
   )
 }

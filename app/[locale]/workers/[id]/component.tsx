@@ -17,13 +17,10 @@ import { FaRegFile } from "react-icons/fa6"
 import { RiFile3Line } from "react-icons/ri"
 import { z } from "zod"
 
-type Props = { worker: Worker | null; documents: Document[] | null }
+type Props = { worker: Worker; documents: Document[] | null }
 
 const WorkerInDetails = ({ worker, documents }: Props) => {
   const { toast } = useToast()
-  if (!worker) {
-    return null
-  }
 
   const formSchema = z.object({
     docs: z
@@ -43,7 +40,7 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
   const docValues = form.watch("docs")
 
   /* drop zone */
-  const acceptables = getAcceptableFileTypes(worker?.kind)
+  const acceptables = getAcceptableFileTypes(worker.kind)
 
   const onDrop = React.useCallback(
     (acceptedFiles: File[]) => {
@@ -61,7 +58,7 @@ const WorkerInDetails = ({ worker, documents }: Props) => {
         toast({ description: err.message })
       }
     },
-    [docValues]
+    [docValues, form, toast]
   )
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({

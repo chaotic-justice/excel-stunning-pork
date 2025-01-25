@@ -55,7 +55,7 @@ export const ImageUploader: React.FC = () => {
         toast({ description: err.message })
       }
     },
-    [imageValues]
+    [imageValues, form, toast]
   )
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
