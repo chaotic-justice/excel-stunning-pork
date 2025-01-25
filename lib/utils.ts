@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { jwtDecode } from "jwt-decode"
 import { twMerge } from "tailwind-merge"
-import * as jose from "jose"
 import { Worker } from "@/types/schemas"
 import { Accept } from "react-dropzone"
 
