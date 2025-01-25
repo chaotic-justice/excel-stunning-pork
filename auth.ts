@@ -1,14 +1,6 @@
 import NextAuth, { DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    accessToken: string
-    refreshToken: string
-    error?: string
-    userId?: string
-  }
-}
 declare module "next-auth" {
   interface Session {
     user: {
