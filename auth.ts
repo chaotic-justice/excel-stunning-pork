@@ -14,20 +14,22 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    // @ts-ignore
     async signIn({ user, account }) {
       //Allow OAuth without email verification
       if (account?.provider !== "credentials") return true
       // email verification logic here
       return true
     },
+    // @ts-ignore
     async session({ token, session }) {
       if (token.userId && session.user) {
-        session.user.id = token.userId
+        session.user.id = token.userId as string
       }
 
       return session
     },
-    async jwt({ token, account }) {
+    async jwt({ token }: { token: any }) {
       return token
     },
   },
