@@ -2,6 +2,9 @@ import { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 
 export default {
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     // @ts-ignore
     async signIn({ user, account }) {
