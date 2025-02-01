@@ -39,16 +39,16 @@ const authMiddleware = (request: NextRequest, ctx: AppRouteHandlerFnContext) => 
 
     if (session) {
       if (isHomePage) {
-        return NextResponse.redirect(new URL("/workers", req.url))
+        return NextResponse.redirect(new URL("/workers", req.nextUrl.origin))
       } else if (isAdminPage) {
         if (!isAdmin(session.user.email)) {
           console.log("not an admin", session.user.email)
-          return NextResponse.redirect(new URL("/not-found", req.url))
+          return NextResponse.redirect(new URL("/not-found", req.nextUrl.origin))
         }
       }
     } else {
       if (isProtected || isAdminPage) {
-        return NextResponse.redirect(new URL("/signin", req.url))
+        return NextResponse.redirect(new URL("/signin", req.nextUrl.origin))
       }
     }
 
