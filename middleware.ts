@@ -1,12 +1,16 @@
-import { auth } from "@/auth"
+// import { auth } from "@/auth"
+import authConfig from "@/auth.config"
 import { routing } from "@/i18n/routing"
 import { isAdmin } from "@/lib/utils"
+import NextAuth from "next-auth"
 import createIntlMiddleware from "next-intl/middleware"
 import { NextRequest, NextResponse } from "next/server"
 
 interface AppRouteHandlerFnContext {
   params?: Record<string, string | string[]>
 }
+
+const { auth } = NextAuth(authConfig)
 
 const intlMiddleware = createIntlMiddleware({
   locales: routing.locales,
@@ -47,19 +51,6 @@ const authMiddleware = (request: NextRequest, ctx: AppRouteHandlerFnContext) => 
         return NextResponse.redirect(new URL("/signin", req.url))
       }
     }
-
-    // if (session && isHomePage) {
-    //   return NextResponse.redirect(new URL("/workers", req.url))
-    // } else if (!session) {
-    //   if (isProtected || isAdminPage) {
-    //     return NextResponse.redirect(new URL("/signin", req.url))
-    //   }
-    // } else if (session && isAdminPage) {
-    //   if (!isAdmin(session.user.email)) {
-    //     console.log("not an admin")
-    //     return NextResponse.redirect(new URL("/not-found", req.url))
-    //   }
-    // }
 
     return intlMiddleware(request)
   })(request, ctx)
