@@ -1,4 +1,3 @@
-// import { auth } from "@/auth"
 import authConfig from "@/auth.config"
 import { routing } from "@/i18n/routing"
 import { isAdmin } from "@/lib/utils"
@@ -42,7 +41,6 @@ const authMiddleware = (request: NextRequest, ctx: AppRouteHandlerFnContext) => 
         return NextResponse.redirect(new URL("/workers", req.nextUrl.origin))
       } else if (isAdminPage) {
         if (!isAdmin(session.user.email)) {
-          console.log("not an admin", session.user.email)
           return NextResponse.redirect(new URL("/not-found", req.nextUrl.origin))
         }
       }
